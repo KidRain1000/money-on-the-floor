@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money on the Court - NBA Matchup Analyzer</title>
+    <link rel="stylesheet" href="styles.css?v=1705970000">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🏀</span>
+                <span class="logo-text">MONEY ON THE COURT</span>
+            </div>
+            <p class="tagline">Compare NBA matchups by available player salaries</p>
+        </header>
+
+        <!-- Date Navigation -->
+        <nav class="date-nav">
+            <button class="nav-btn prev-btn" id="prevDay">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </button>
+            <div class="date-display">
+                <span class="date-label" id="dateLabel">Today's Games</span>
+                <span class="date-value" id="dateValue">Loading...</span>
+            </div>
+            <button class="nav-btn next-btn" id="nextDay">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <label>Sort by:</label>
+                <select id="sortBy">
+                    <option value="time">Game Time</option>
+                    <option value="salary">Total Salary</option>
+                    <option value="injuries">Most Injuries</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Show:</label>
+                <select id="filterStatus">
+                    <option value="all">All Games</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="live">Live</option>
+                    <option value="final">Final</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Games Container -->
+        <main class="games-container" id="gamesContainer">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Loading games...</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Data refreshes every 5 minutes</p>
+            <div class="social-links">
+                <a href="#" target="_blank">Twitter</a>
+                <a href="#" target="_blank">Reddit</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Game Card Template (hidden) -->
+    <template id="gameCardTemplate">
+        <article class="game-card">
+            <div class="game-header">
+                <div class="team away-team">
+                    <img class="team-logo" src="" alt="">
+                    <span class="team-abbr"></span>
+                    <span class="team-name"></span>
+                    <span class="team-record"></span>
+                </div>
+                <div class="game-info">
+                    <span class="game-status"></span>
+                    <span class="game-score"></span>
+                    <span class="game-time"></span>
+                </div>
+                <div class="team home-team">
+                    <img class="team-logo" src="" alt="">
+                    <span class="team-abbr"></span>
+                    <span class="team-name"></span>
+                    <span class="team-record"></span>
+                </div>
+            </div>
+            <div class="game-summary">
+                <div class="summary-stat">
+                    <span class="stat-label">Available Salary</span>
+                    <div class="salary-comparison">
+                        <span class="away-salary">$0</span>
+                        <div class="salary-bar-container">
+                            <div class="salary-bar away-bar"></div>
+                            <div class="salary-bar home-bar"></div>
+                        </div>
+                        <span class="home-salary">$0</span>
+                    </div>
+                </div>
+                <div class="summary-stat injuries-summary">
+                    <span class="stat-label">Key Injuries</span>
+                    <span class="injuries-count"></span>
+                </div>
+            </div>
+            <button class="expand-btn">
+                <span>View Rosters</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </button>
+            <div class="game-details">
+                <div class="roster-container">
+                    <div class="roster away-roster">
+                        <h3 class="roster-title"></h3>
+                        <div class="roster-filters">
+                            <button class="roster-filter active" data-filter="all">All</button>
+                            <button class="roster-filter" data-filter="active">Active</button>
+                            <button class="roster-filter" data-filter="out">Out</button>
+                        </div>
+                        <ul class="player-list"></ul>
+                    </div>
+                    <div class="roster home-roster">
+                        <h3 class="roster-title"></h3>
+                        <div class="roster-filters">
+                            <button class="roster-filter active" data-filter="all">All</button>
+                            <button class="roster-filter" data-filter="active">Active</button>
+                            <button class="roster-filter" data-filter="out">Out</button>
+                        </div>
+                        <ul class="player-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <!-- Player Row Template -->
+    <template id="playerRowTemplate">
+        <li class="player-row">
+            <div class="player-info">
+                <span class="player-status-dot"></span>
+                <span class="player-name"></span>
+                <span class="player-position"></span>
+            </div>
+            <div class="player-salary">
+                <span class="salary-value"></span>
+                <div class="salary-bar-mini"></div>
+            </div>
+            <span class="player-status-label"></span>
+        </li>
+    </template>
+
+    <script src="app.js?v=9999"></script>
+</body>
+</html>

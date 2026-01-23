@@ -1,0 +1,844 @@
+/* CSS Variables - Matching Original Money on the Floor */
+:root {
+    /* Colors - Sage green / Earth tone palette */
+    --bg-primary: #1a1d17;
+    --bg-secondary: #232820;
+    --bg-card: #2a2f25;
+    --bg-hover: #353b2f;
+
+    --text-primary: #e8ebe4;
+    --text-secondary: #B1BBA6;
+    --text-muted: #7C8377;
+
+    /* Accent colors from original */
+    --accent-sage: #959C8D;
+    --accent-sage-light: #B1BBA6;
+    --accent-green: #B6FF94;
+    --accent-green-dark: #314229;
+    --accent-red: #F86663;
+    --accent-red-dark: #491C1B;
+
+    /* Status Colors - matching original */
+    --status-active: #B6FF94;
+    --status-active-text: #314229;
+    --status-probable: #a8d99a;
+    --status-questionable: #d4c98a;
+    --status-doubtful: #e8a87a;
+    --status-out: #F86663;
+    --status-out-text: #491C1B;
+    --status-grey: #7C8377;
+
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* App Container */
+.app {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: var(--spacing-md);
+    padding-bottom: 100px;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.logo-icon {
+    font-size: 2rem;
+}
+
+.logo-text {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-sage-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.tagline {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Date Navigation */
+.date-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    margin-bottom: var(--spacing-md);
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--bg-card);
+    border: 2px solid var(--accent-sage);
+    border-radius: var(--radius-md);
+    color: var(--accent-sage-light);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.nav-btn:hover {
+    background: var(--accent-sage);
+    color: var(--bg-primary);
+}
+
+.nav-btn:active {
+    transform: scale(0.95);
+}
+
+.date-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 160px;
+}
+
+.date-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.date-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--accent-sage);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.filter-group label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.filter-group select {
+    background: var(--bg-card);
+    border: 1px solid var(--accent-sage);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.filter-group select:hover,
+.filter-group select:focus {
+    border-color: var(--accent-sage-light);
+    outline: none;
+}
+
+/* Loading */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+    color: var(--text-secondary);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--bg-hover);
+    border-top-color: var(--accent-sage);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Games Container */
+.games-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* Game Card - Matching original style */
+.game-card {
+    background: var(--bg-card);
+    border: 2px solid var(--accent-sage);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: var(--transition-normal);
+}
+
+.game-card:hover {
+    border-color: var(--accent-sage-light);
+}
+
+.game-card.expanded {
+    border-color: var(--accent-green);
+}
+
+/* Money on the Court - Winner/Loser Indicators */
+.game-card.money-won {
+    background: linear-gradient(135deg, #1a3320 0%, #1e3a25 100%);
+    border-color: #3fb950;
+}
+
+.game-card.money-won .game-header {
+    background: rgba(63, 185, 80, 0.1);
+}
+
+.game-card.money-won .team-abbr {
+    color: #7ee787;
+}
+
+.game-card.money-won .game-status.final {
+    background: #238636;
+    color: #ffffff;
+}
+
+.game-card.money-lost {
+    background: linear-gradient(135deg, #3d1a1a 0%, #3a1e1e 100%);
+    border-color: #f85149;
+}
+
+.game-card.money-lost .game-header {
+    background: rgba(248, 81, 73, 0.1);
+}
+
+.game-card.money-lost .team-abbr {
+    color: #ffa198;
+}
+
+.game-card.money-lost .game-status.final {
+    background: #da3633;
+    color: #ffffff;
+}
+
+/* Winner indicator label */
+.game-card.money-won::before,
+.game-card.money-lost::before {
+    content: '';
+    display: block;
+    padding: 6px 12px;
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.game-card.money-won::before {
+    content: '💰 MONEY ON THE COURT ✓';
+    background: #238636;
+    color: #ffffff;
+}
+
+.game-card.money-lost::before {
+    content: '❌ UPSET - MONEY LOST';
+    background: #da3633;
+    color: #ffffff;
+}
+
+/* Game Header */
+.game-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: var(--spacing-lg);
+    gap: var(--spacing-md);
+}
+
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.team-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    margin-bottom: 4px;
+}
+
+.away-team {
+    text-align: center;
+    align-items: flex-start;
+}
+
+.away-team .team-logo {
+    align-self: flex-start;
+}
+
+.home-team {
+    text-align: center;
+    align-items: flex-end;
+}
+
+.home-team .team-logo {
+    align-self: flex-end;
+}
+
+.team-abbr {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+}
+
+.team-name {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.team-record {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 90px;
+}
+
+.game-status {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.game-status.scheduled {
+    background: var(--accent-sage);
+    color: var(--bg-primary);
+}
+
+.game-status.live {
+    background: var(--accent-red);
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+.game-status.final {
+    background: var(--status-grey);
+    color: var(--text-primary);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.game-score {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+}
+
+.game-time {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Game Summary */
+.game-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--spacing-lg) var(--spacing-md);
+    gap: var(--spacing-md);
+}
+
+.summary-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.summary-stat .stat-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+}
+
+.salary-comparison {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.away-salary, .home-salary {
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-width: 50px;
+}
+
+.away-salary {
+    text-align: right;
+    color: var(--accent-sage-light);
+}
+
+.home-salary {
+    text-align: left;
+    color: var(--accent-green);
+}
+
+.salary-bar-container {
+    display: flex;
+    width: 100px;
+    height: 6px;
+    background: var(--bg-secondary);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.salary-bar {
+    height: 100%;
+    transition: width var(--transition-normal);
+}
+
+.away-bar {
+    background: var(--accent-sage-light);
+}
+
+.home-bar {
+    background: var(--accent-green);
+}
+
+.injuries-count {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.injuries-count.high {
+    color: var(--accent-red);
+}
+
+.injuries-count.medium {
+    color: var(--status-questionable);
+}
+
+.injuries-count.low {
+    color: var(--accent-green);
+}
+
+/* Expand Button */
+.expand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border: none;
+    border-top: 1px solid var(--accent-sage);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.expand-btn:hover {
+    background: var(--bg-hover);
+    color: var(--accent-sage-light);
+}
+
+.expand-btn svg {
+    transition: transform var(--transition-fast);
+}
+
+.game-card.expanded .expand-btn svg {
+    transform: rotate(180deg);
+}
+
+.game-card.expanded .expand-btn span {
+    display: none;
+}
+
+.game-card.expanded .expand-btn::before {
+    content: 'Hide Rosters';
+}
+
+/* Game Details */
+.game-details {
+    display: none;
+    padding: var(--spacing-lg);
+    background: var(--bg-secondary);
+}
+
+.game-card.expanded .game-details {
+    display: block;
+}
+
+.roster-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/* Roster */
+.roster {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.roster-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--accent-sage);
+}
+
+.away-roster .roster-title {
+    border-color: var(--accent-sage-light);
+}
+
+.home-roster .roster-title {
+    border-color: var(--accent-green);
+}
+
+.roster-filters {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.roster-filter {
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid var(--accent-sage);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.roster-filter:hover {
+    border-color: var(--accent-sage-light);
+    color: var(--text-primary);
+}
+
+.roster-filter.active {
+    background: var(--accent-sage);
+    border-color: var(--accent-sage);
+    color: var(--bg-primary);
+}
+
+/* Player List */
+.player-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.player-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    gap: var(--spacing-sm);
+    transition: var(--transition-fast);
+}
+
+.player-row:hover {
+    border-color: var(--accent-sage);
+}
+
+.player-row.out {
+    opacity: 0.5;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: 1;
+    min-width: 0;
+}
+
+.player-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.player-status-dot.active { background: var(--status-active); }
+.player-status-dot.probable { background: var(--status-probable); }
+.player-status-dot.questionable { background: var(--status-questionable); }
+.player-status-dot.doubtful { background: var(--status-doubtful); }
+.player-status-dot.out { background: var(--status-out); }
+
+.player-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.player-position {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.player-salary {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+}
+
+.salary-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-green);
+    min-width: 55px;
+    text-align: right;
+}
+
+.salary-bar-mini {
+    width: 35px;
+    height: 4px;
+    background: var(--bg-primary);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Player Status Labels - Matching original colors */
+.player-status-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.player-status-label.active {
+    background: var(--status-active);
+    color: var(--status-active-text);
+}
+
+.player-status-label.probable {
+    background: var(--status-probable);
+    color: var(--status-active-text);
+}
+
+.player-status-label.questionable {
+    background: var(--status-questionable);
+    color: #3d3520;
+}
+
+.player-status-label.doubtful {
+    background: var(--status-doubtful);
+    color: #3d2a1a;
+}
+
+.player-status-label.out {
+    background: var(--status-out);
+    color: var(--status-out-text);
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--accent-sage);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.social-links {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.social-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.social-links a:hover {
+    color: var(--accent-green);
+}
+
+/* No Games Message */
+.no-games {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+}
+
+.no-games h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-sage);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-sage-light);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .app {
+        padding: var(--spacing-sm);
+    }
+
+    .header {
+        padding: var(--spacing-lg) 0;
+    }
+
+    .logo-text {
+        font-size: 1.3rem;
+    }
+
+    .game-header {
+        padding: var(--spacing-md);
+    }
+
+    .team-abbr {
+        font-size: 1.4rem;
+    }
+
+    .game-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .salary-bar-container {
+        width: 80px;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group {
+        justify-content: space-between;
+    }
+}
