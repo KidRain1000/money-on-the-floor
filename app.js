@@ -67,6 +67,61 @@ function generateStatus() {
     return 'out';
 }
 
+async function fetchTeamRoster(teamAbbr) {
+    try {
+        var url = CONFIG.apiBaseUrl + '/injuries?team=' + teamAbbr;
+        var response = await fetch(url);
+        var data = await response.json();
+        if (data.players && data.players.length > 0) {
+            console.log('Fetched roster for', teamAbbr, ':', data.players.length, 'players');
+            return data.players;
+        }
+    } catch (err) {
+        console.error('Error fetching roster for ' + teamAbbr, err);
+    }
+    return null;
+}
+
+function buildRosterFromESPN(espnPlayers) {
+    var tiers = ['star', 'starter', 'starter', 'starter', 'starter', 'rotation', 'rotation', 'rotation', 'bench', 'bench', 'bench', 'bench'];
+
+    if (!espnPlayers || espnPlayers.length === 0) {
+        // Fallback to generic names if no players found
+        var positions = ['PG', 'SG', 'SF', 'PF', 'C', 'PG', 'SG', 'SF', 'PF', 'C', 'SG', 'SF'];
+        return positions.map(function(pos, i) {
+            return {
+                name: 'Player ' + (i + 1),
+                position: pos,
+                tier: tiers[i],
+                salary: generateSalary(tiers[i]),
+                status: 'active'
+            };
+        });
+    }
+
+    // Use ESPN roster data (already includes injury status)
+    var roster = [];
+    var count = Math.min(espnPlayers.length, 12);
+
+    for (var i = 0; i < count; i++) {
+        var player = espnPlayers[i];
+        var tier = tiers[i] || 'bench';
+
+        // Use real salary if available, otherwise generate based on tier
+        var salary = player.salary ? player.salary : generateSalary(tier);
+
+        roster.push({
+            name: player.name,
+            position: player.position || 'F',
+            tier: tier,
+            salary: salary,
+            status: player.status || 'active'
+        });
+    }
+
+    return roster;
+}
+
 function generateRoster() {
     const positions = ['PG', 'SG', 'SF', 'PF', 'C', 'PG', 'SG', 'SF', 'PF', 'C', 'SG', 'SF'];
     const tiers = ['star', 'starter', 'starter', 'starter', 'starter', 'rotation', 'rotation', 'rotation', 'bench', 'bench', 'bench', 'bench'];
@@ -120,6 +175,28 @@ async function fetchGames(date) {
         console.log('Data received, game count:', data.data ? data.data.length : 0);
 
         if (data.data && data.data.length > 0) {
+            // Get unique team abbreviations
+            var teamAbbrs = [];
+            data.data.forEach(function(game) {
+                if (teamAbbrs.indexOf(game.visitor_team.abbreviation) === -1) {
+                    teamAbbrs.push(game.visitor_team.abbreviation);
+                }
+                if (teamAbbrs.indexOf(game.home_team.abbreviation) === -1) {
+                    teamAbbrs.push(game.home_team.abbreviation);
+                }
+            });
+
+            // Fetch rosters from ESPN (includes players + injuries)
+            var rostersByTeam = {};
+            var rosterPromises = teamAbbrs.map(function(abbr) {
+                return fetchTeamRoster(abbr).then(function(players) {
+                    rostersByTeam[abbr] = players;
+                });
+            });
+
+            await Promise.all(rosterPromises);
+            console.log('Fetched rosters for', Object.keys(rostersByTeam).length, 'teams');
+
             return data.data.map(function(game) {
                 var awayAbbr = game.visitor_team.abbreviation;
                 var homeAbbr = game.home_team.abbreviation;
@@ -128,13 +205,17 @@ async function fetchGames(date) {
                 if (game.status === 'Final') status = 'final';
                 else if (game.period > 0) status = 'live';
 
-                var awayRoster = generateRoster();
-                var homeRoster = generateRoster();
+                var awayRoster = buildRosterFromESPN(rostersByTeam[awayAbbr]);
+                var homeRoster = buildRosterFromESPN(rostersByTeam[homeAbbr]);
 
                 var awayAvailable = awayRoster.filter(function(p) { return p.status !== 'out'; }).reduce(function(s, p) { return s + p.salary; }, 0);
                 var homeAvailable = homeRoster.filter(function(p) { return p.status !== 'out'; }).reduce(function(s, p) { return s + p.salary; }, 0);
                 var awayInjuries = awayRoster.filter(function(p) { return p.status === 'out' || p.status === 'doubtful'; }).length;
                 var homeInjuries = homeRoster.filter(function(p) { return p.status === 'out' || p.status === 'doubtful'; }).length;
+
+                // Get injured players list
+                var awayInjuredPlayers = awayRoster.filter(function(p) { return p.status === 'out' || p.status === 'doubtful'; });
+                var homeInjuredPlayers = homeRoster.filter(function(p) { return p.status === 'out' || p.status === 'doubtful'; });
 
                 return {
                     id: game.id,
@@ -146,7 +227,8 @@ async function fetchGames(date) {
                         score: game.visitor_team_score || 0,
                         roster: awayRoster.sort(function(a, b) { return b.salary - a.salary; }),
                         availableSalary: awayAvailable,
-                        injuries: awayInjuries
+                        injuries: awayInjuries,
+                        injuredPlayers: awayInjuredPlayers
                     },
                     homeTeam: {
                         abbr: homeAbbr,
@@ -155,7 +237,8 @@ async function fetchGames(date) {
                         score: game.home_team_score || 0,
                         roster: homeRoster.sort(function(a, b) { return b.salary - a.salary; }),
                         availableSalary: homeAvailable,
-                        injuries: homeInjuries
+                        injuries: homeInjuries,
+                        injuredPlayers: homeInjuredPlayers
                     },
                     totalInjuries: awayInjuries + homeInjuries
                 };
@@ -167,6 +250,42 @@ async function fetchGames(date) {
 
     console.log('No games found');
     return [];
+}
+
+function renderInjuredPlayers(awayTeam, homeTeam) {
+    var html = '';
+
+    if (awayTeam.injuredPlayers.length > 0) {
+        html += '<div class="injury-team-section">';
+        html += '<span class="injury-team-name">' + awayTeam.abbr + '</span>';
+        awayTeam.injuredPlayers.forEach(function(p) {
+            html += '<div class="injury-player">';
+            html += '<span class="injury-player-name">' + p.name + '</span>';
+            html += '<span class="injury-player-pos">' + p.position + '</span>';
+            html += '<span class="injury-player-status ' + p.status + '">' + p.status.charAt(0).toUpperCase() + p.status.slice(1) + '</span>';
+            html += '</div>';
+        });
+        html += '</div>';
+    }
+
+    if (homeTeam.injuredPlayers.length > 0) {
+        html += '<div class="injury-team-section">';
+        html += '<span class="injury-team-name">' + homeTeam.abbr + '</span>';
+        homeTeam.injuredPlayers.forEach(function(p) {
+            html += '<div class="injury-player">';
+            html += '<span class="injury-player-name">' + p.name + '</span>';
+            html += '<span class="injury-player-pos">' + p.position + '</span>';
+            html += '<span class="injury-player-status ' + p.status + '">' + p.status.charAt(0).toUpperCase() + p.status.slice(1) + '</span>';
+            html += '</div>';
+        });
+        html += '</div>';
+    }
+
+    if (html === '') {
+        html = '<div class="no-injuries">No key injuries reported</div>';
+    }
+
+    return html;
 }
 
 function renderGames() {
@@ -226,8 +345,14 @@ function renderGames() {
                 '</div>' +
             '</div>' +
             '<div class="summary-stat injuries-summary">' +
-                '<span class="stat-label">Key Injuries</span>' +
-                '<span class="injuries-count ' + injuryClass + '">' + game.totalInjuries + ' player' + (game.totalInjuries !== 1 ? 's' : '') + ' out/doubtful</span>' +
+                '<button class="injuries-toggle">' +
+                    '<span class="stat-label">Key Injuries</span>' +
+                    '<span class="injuries-count ' + injuryClass + '">' + game.totalInjuries + ' player' + (game.totalInjuries !== 1 ? 's' : '') + ' out/doubtful</span>' +
+                    '<svg class="injuries-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>' +
+                '</button>' +
+                '<div class="injuries-dropdown">' +
+                    renderInjuredPlayers(game.awayTeam, game.homeTeam) +
+                '</div>' +
             '</div>' +
         '</div>' +
         '<button class="expand-btn">' +
@@ -249,6 +374,11 @@ function renderGames() {
 
         card.querySelector('.expand-btn').addEventListener('click', function() {
             card.classList.toggle('expanded');
+        });
+
+        card.querySelector('.injuries-toggle').addEventListener('click', function(e) {
+            e.stopPropagation();
+            card.querySelector('.injuries-summary').classList.toggle('injuries-open');
         });
 
         container.appendChild(card);

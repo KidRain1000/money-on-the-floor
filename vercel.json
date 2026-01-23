@@ -24,6 +24,14 @@
       "dest": "/api/games.js"
     },
     {
+      "src": "/api/players",
+      "dest": "/api/players.js"
+    },
+    {
+      "src": "/api/injuries",
+      "dest": "/api/injuries.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }
