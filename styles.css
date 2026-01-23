@@ -300,7 +300,7 @@ body {
 }
 
 .game-card.money-won::before {
-    content: '💰 MONEY ON THE COURT ✓';
+    content: '💰 MONEY ON THE FLOOR ✓';
     background: #238636;
     color: #ffffff;
 }

@@ -1,6 +1,6 @@
-# Money on the Court
+# Money on the Floor
 
-NBA Matchup Analyzer - Compare games by available player salaries. See which team has more "money on the court" and track if that predicts winners.
+NBA Matchup Analyzer - Compare games by available player salaries. See which team has more "money on the floor" and track if that predicts winners.
 
 **Live Demo:** https://money-on-the-floor.vercel.app
 
@@ -73,7 +73,7 @@ money-on-the-floor/
 - Change the color scheme in `styles.css` (CSS variables at top)
 - Add team records/standings
 - Add betting odds integration
-- Add historical win rate for "money on the court" strategy
+- Add historical win rate for "money on the floor" strategy
 - Add player photos
 
 ## Tech Stack
