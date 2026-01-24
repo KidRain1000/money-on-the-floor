@@ -455,7 +455,7 @@ body {
 
 .away-salary {
     text-align: right;
-    color: var(--text-primary);
+    color: #ffffff;
 }
 
 .home-salary {
@@ -478,7 +478,7 @@ body {
 }
 
 .away-bar {
-    background: var(--text-primary);
+    background: #ffffff;
 }
 
 .home-bar {
