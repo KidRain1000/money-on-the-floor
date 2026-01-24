@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://money-on-the-floor.vercel.app/sitemap.xml
