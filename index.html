@@ -4,6 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Money on the Floor - NBA Matchup Analyzer</title>
+    <meta name="description" content="Free NBA matchup analyzer showing player injuries and salary impact. Compare team rosters, track injuries, and make smarter betting and fantasy decisions.">
+    <meta name="keywords" content="NBA injuries, NBA matchup analyzer, NBA salary cap, NBA betting tool, fantasy basketball, NBA player status">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Money on the Floor - NBA Matchup Analyzer">
+    <meta property="og:description" content="Free tool to analyze NBA matchups by injuries and available salary. Perfect for betting and fantasy basketball.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://money-on-the-floor.vercel.app/">
+    <meta property="og:image" content="https://money-on-the-floor.vercel.app/og-image.svg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Money on the Floor - NBA Matchup Analyzer">
+    <meta name="twitter:description" content="Free NBA injury and salary analyzer for smarter betting and fantasy decisions.">
+    <meta name="twitter:image" content="https://money-on-the-floor.vercel.app/og-image.svg">
+
+    <link rel="canonical" href="https://money-on-the-floor.vercel.app/">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9F95R6CLRG"></script>
@@ -22,10 +42,10 @@
     <div class="app">
         <!-- Header -->
         <header class="header">
-            <div class="logo">
+            <h1 class="logo">
                 <span class="logo-icon">🏀</span>
                 <span class="logo-text">MONEY ON THE FLOOR</span>
-            </div>
+            </h1>
             <p class="tagline">Compare NBA matchups by available player salaries</p>
         </header>
 
@@ -55,13 +75,64 @@
             </div>
         </main>
 
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>What does "available salary" mean in NBA matchups?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Available salary shows the total salary of players who are active and expected to play. When star players are injured or resting, the available salary drops significantly. This helps you understand which team has more firepower on the court for any given game.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>How often is the injury data updated?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Our injury data refreshes every 5 minutes during game days. We pull directly from official NBA sources to ensure you have the most current player status information for your betting and fantasy decisions.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>How can I use this for NBA betting?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Compare the available salary between teams to gauge relative strength. If a team is missing $40M+ in salary due to injuries, the spread may not fully account for this. Look for games where one team has significantly more available salary than their opponent.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>What do the injury status labels mean?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p><strong>OUT:</strong> Player will not play. <strong>DOUBTFUL:</strong> Very unlikely to play (25% chance). <strong>QUESTIONABLE:</strong> Uncertain, could go either way (50% chance). <strong>PROBABLE:</strong> Likely to play (75%+ chance). <strong>ACTIVE:</strong> Confirmed playing, no injury concerns.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>Is this useful for fantasy basketball?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolutely! When star players are out, role players often see increased minutes and usage. Use this tool to identify which players might have expanded roles due to injuries. The salary data helps you understand the value of each player's typical contribution.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <footer class="footer">
-            <p>Data refreshes every 5 minutes</p>
-            <div class="social-links">
-                <a href="#" target="_blank">Twitter</a>
-                <a href="#" target="_blank">Reddit</a>
-            </div>
+            <p>Data refreshes every 5 minutes | <a href="https://compound-interest-calculator-coral.vercel.app/">Compound Interest Calculator</a></p>
         </footer>
     </div>
 
@@ -152,5 +223,76 @@
     </template>
 
     <script src="app.js?v=10004"></script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What does available salary mean in NBA matchups?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Available salary shows the total salary of players who are active and expected to play. When star players are injured or resting, the available salary drops significantly. This helps you understand which team has more firepower on the court for any given game."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How often is the injury data updated?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our injury data refreshes every 5 minutes during game days. We pull directly from official NBA sources to ensure you have the most current player status information for your betting and fantasy decisions."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How can I use this for NBA betting?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Compare the available salary between teams to gauge relative strength. If a team is missing $40M+ in salary due to injuries, the spread may not fully account for this. Look for games where one team has significantly more available salary than their opponent."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What do the injury status labels mean?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "OUT: Player will not play. DOUBTFUL: Very unlikely to play (25% chance). QUESTIONABLE: Uncertain, could go either way (50% chance). PROBABLE: Likely to play (75%+ chance). ACTIVE: Confirmed playing, no injury concerns."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is this useful for fantasy basketball?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Absolutely! When star players are out, role players often see increased minutes and usage. Use this tool to identify which players might have expanded roles due to injuries. The salary data helps you understand the value of each player's typical contribution."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- FAQ Accordion Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const questions = document.querySelectorAll('.faq-question');
+        questions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isOpen = question.getAttribute('aria-expanded') === 'true';
+                questions.forEach(q => {
+                    q.setAttribute('aria-expanded', 'false');
+                    q.nextElementSibling.classList.remove('open');
+                });
+                if (!isOpen) {
+                    question.setAttribute('aria-expanded', 'true');
+                    answer.classList.add('open');
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
